@@ -37,8 +37,6 @@ object Form1: TForm1
       'Memo1')
     ScrollBars = ssBoth
     TabOrder = 0
-    ExplicitLeft = 1
-    ExplicitTop = -6
   end
   object SynEdit1: TSynEdit
     Left = 0
@@ -125,6 +123,7 @@ object Form1: TForm1
       Align = alRight
       Caption = 'Wipe Python on Exit'
       TabOrder = 0
+      Visible = False
     end
     object Button1: TButton
       Left = 87
