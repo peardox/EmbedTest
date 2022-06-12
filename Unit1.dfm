@@ -58,15 +58,17 @@ object Form1: TForm1
     Font.Quality = fqClearTypeNatural
     TabOrder = 1
     OnKeyPress = SynEdit1KeyPress
-    UseCodeFolding = False
+    UseCodeFolding = True
+    Gutter.AutoSize = True
     Gutter.Font.Charset = DEFAULT_CHARSET
     Gutter.Font.Color = clWindowText
     Gutter.Font.Height = -11
     Gutter.Font.Name = 'Consolas'
     Gutter.Font.Style = []
+    Gutter.RightOffset = 15
+    Gutter.ShowLineNumbers = True
     Highlighter = SynPythonSyn1
     Lines.Strings = (
-      'import numpy'
       'import torch'
       ''
       'gpu_supported = 0'
@@ -97,6 +99,10 @@ object Form1: TForm1
       ''
       'print("GPU Support : ", gpu_supported);'
       '')
+    TabWidth = 4
+    WantTabs = True
+    ExplicitLeft = 1
+    ExplicitTop = 268
   end
   object StatusBar1: TStatusBar
     Left = 0
@@ -191,64 +197,53 @@ object Form1: TForm1
   end
   object PyTorch1: TPyTorch
     AutoImport = False
-    BeforeImport = PyTorch1BeforeImport
     PythonEngine = PythonEngine1
     PyEnvironment = PyEmbeddedResEnvironment391
     ManagerKind = pip
     Managers.Pip.InstallOptions.ExtraIndexUrl = 'https://download.pytorch.org/whl/cu113'
     AutoInstall = False
-    BeforeInstall = PyTorch1BeforeInstall
-    OnInstallError = PackageInstallError
-    AfterInstall = PyTorch1AfterInstall
+    BeforeInstall = PackageConfigureInstall
     Left = 520
     Top = 192
   end
   object TorchVision1: TTorchVision
     AutoImport = False
-    BeforeImport = TorchVision1BeforeImport
     PythonEngine = PythonEngine1
     PyEnvironment = PyEmbeddedResEnvironment391
     ManagerKind = pip
     Managers.Pip.InstallOptions.ExtraIndexUrl = 'https://download.pytorch.org/whl/cu113'
     AutoInstall = False
-    BeforeInstall = TorchVision1BeforeInstall
-    AfterInstall = TorchVision1AfterInstall
+    BeforeInstall = PackageConfigureInstall
     Left = 448
     Top = 192
   end
   object NumPy1: TNumPy
     AutoImport = False
-    BeforeImport = NumPy1BeforeImport
     PythonEngine = PythonEngine1
     PyEnvironment = PyEmbeddedResEnvironment391
     ManagerKind = pip
     AutoInstall = False
-    BeforeInstall = NumPy1BeforeInstall
-    AfterInstall = NumPy1AfterInstall
+    BeforeInstall = PackageConfigureInstall
     Left = 376
     Top = 192
   end
   object H5Py1: TH5Py
     AutoImport = False
-    BeforeImport = H5Py1BeforeImport
     PythonEngine = PythonEngine1
     PyEnvironment = PyEmbeddedResEnvironment391
     ManagerKind = pip
     AutoInstall = False
-    BeforeInstall = H5Py1BeforeInstall
-    AfterInstall = H5Py1AfterInstall
+    BeforeInstall = PackageConfigureInstall
     Left = 312
     Top = 192
   end
   object SciPy1: TSciPy
     AutoImport = False
-    BeforeImport = SciPy1BeforeImport
     PythonEngine = PythonEngine1
     PyEnvironment = PyEmbeddedResEnvironment391
     ManagerKind = pip
     AutoInstall = False
-    BeforeInstall = SciPy1BeforeInstall
-    AfterInstall = SciPy1AfterInstall
+    BeforeInstall = PackageConfigureInstall
     Left = 248
     Top = 192
   end

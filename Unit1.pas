@@ -48,28 +48,17 @@ type
       ADistribution: TPyCustomEmbeddableDistribution; FileName: string;
       Header: TZipHeader; Position: Int64);
     procedure SynEdit1KeyPress(Sender: TObject; var Key: Char);
-    procedure PyTorch1AfterInstall(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure Button1Click(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure Button2Click(Sender: TObject);
     procedure PythonEngine1AfterLoad(Sender: TObject);
     procedure PythonEngine1AfterInit(Sender: TObject);
-    procedure NumPy1BeforeImport(Sender: TObject);
-    procedure PyTorch1BeforeImport(Sender: TObject);
-    procedure TorchVision1BeforeImport(Sender: TObject);
-    procedure TorchVision1AfterInstall(Sender: TObject);
-    procedure NumPy1AfterInstall(Sender: TObject);
-    procedure H5Py1AfterInstall(Sender: TObject);
-    procedure H5Py1BeforeImport(Sender: TObject);
-    procedure H5Py1BeforeInstall(Sender: TObject);
-    procedure NumPy1BeforeInstall(Sender: TObject);
-    procedure TorchVision1BeforeInstall(Sender: TObject);
-    procedure PyTorch1BeforeInstall(Sender: TObject);
-    procedure SciPy1AfterInstall(Sender: TObject);
-    procedure SciPy1BeforeImport(Sender: TObject);
-    procedure SciPy1BeforeInstall(Sender: TObject);
+
+    procedure PackageConfigureInstall(Sender: TObject);
+    procedure PackageAfterInstall(Sender: TObject);
     procedure PackageInstallError(Sender: TObject; AErrorMessage: string);
+    procedure PackageBeforeImport(Sender: TObject);
   private
     { Private declarations }
 //    Packager: TPyPackage;
@@ -114,85 +103,32 @@ begin
    Memo1.Lines.Add(AMsg);
 end;
 
-procedure TForm1.NumPy1BeforeImport(Sender: TObject);
+procedure TForm1.PackageConfigureInstall(Sender: TObject);
 begin
-  Log('Importing Numpy');
-  UpdateInstallationStatus('Importing Numpy', String.Empty);
-  MaskFPUExceptions(True);
-end;
-
-procedure TForm1.NumPy1BeforeInstall(Sender: TObject);
-begin
+  TPyManagedPackage(Sender).AfterInstall := PackageAfterInstall;
   TPyManagedPackage(Sender).OnInstallError := PackageInstallError;
+  TPyManagedPackage(Sender).BeforeImport := PackageBeforeImport;
+
   MaskFPUExceptions(True);
-  Log('Installing NumPy');
-  UpdateInstallationStatus('Installing NumPy', String.Empty);
+  Log('Installing ' + TPyPackage(Sender).PyModuleName);
+  UpdateInstallationStatus('Installing ' + TPyPackage(Sender).PyModuleName, String.Empty);
 end;
 
-procedure TForm1.PyTorch1BeforeImport(Sender: TObject);
+procedure TForm1.PackageAfterInstall(Sender: TObject);
 begin
-  Log('Importing Torch');
-  UpdateInstallationStatus('Importing Torch', String.Empty);
-  MaskFPUExceptions(True);
+  Log(TPyPackage(Sender).PyModuleName + ' Installed');
 end;
 
-procedure TForm1.PyTorch1BeforeInstall(Sender: TObject);
+procedure TForm1.PackageBeforeImport(Sender: TObject);
 begin
-  // 'https://download.pytorch.org/whl/cu113';
+  Log('Importing ' + TPyPackage(Sender).PyModuleName);
+  UpdateInstallationStatus('Importing ' + TPyPackage(Sender).PyModuleName, String.Empty);
   MaskFPUExceptions(True);
-  Log('Installing Torch');
-  UpdateInstallationStatus('Installing Torch', String.Empty);
 end;
 
 procedure TForm1.PackageInstallError(Sender: TObject; AErrorMessage: string);
 begin
   Log(TPyPackage(Sender).PyModuleName + ' : ' + AErrorMessage);
-end;
-
-procedure TForm1.NumPy1AfterInstall(Sender: TObject);
-begin
-  Log('Numpy Installed');
-end;
-
-procedure TForm1.H5Py1AfterInstall(Sender: TObject);
-begin
-  Log('H5Py Installed');
-end;
-
-procedure TForm1.H5Py1BeforeImport(Sender: TObject);
-begin
-  Log('Importing H5Py');
-end;
-
-procedure TForm1.H5Py1BeforeInstall(Sender: TObject);
-begin
-  MaskFPUExceptions(True);
-  Log('Installing H5Py');
-  UpdateInstallationStatus('Installing H5Py', String.Empty);
-end;
-
-procedure TForm1.PyTorch1AfterInstall(Sender: TObject);
-begin
-  Log('Torch Installed');
-end;
-
-procedure TForm1.TorchVision1AfterInstall(Sender: TObject);
-begin
-  Log('TorchVision Installed');
-end;
-
-procedure TForm1.TorchVision1BeforeImport(Sender: TObject);
-begin
-  Log('Importing TorchVision');
-  UpdateInstallationStatus('Importing TorchVision', String.Empty);
-  MaskFPUExceptions(True);
-end;
-
-procedure TForm1.TorchVision1BeforeInstall(Sender: TObject);
-begin
-  MaskFPUExceptions(True);
-  Log('Installing TorchVision');
-  UpdateInstallationStatus('Installing TorchVision', String.Empty);
 end;
 
 procedure TForm1.UpdateInstallationStatus(const AStatus,
@@ -361,25 +297,6 @@ end;
 procedure TForm1.PythonEngine1AfterLoad(Sender: TObject);
 begin
   Log('Python Loaded');
-end;
-
-procedure TForm1.SciPy1AfterInstall(Sender: TObject);
-begin
-  Log('SciPy Installed');
-end;
-
-procedure TForm1.SciPy1BeforeImport(Sender: TObject);
-begin
-  Log('Importing SciPy');
-  UpdateInstallationStatus('Importing SciPy', String.Empty);
-  MaskFPUExceptions(True);
-end;
-
-procedure TForm1.SciPy1BeforeInstall(Sender: TObject);
-begin
-  MaskFPUExceptions(True);
-  Log('Installing SciPy');
-  UpdateInstallationStatus('Installing SciPy', String.Empty);
 end;
 
 procedure TForm1.SynEdit1KeyPress(Sender: TObject; var Key: Char);
