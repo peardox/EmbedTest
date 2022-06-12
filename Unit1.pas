@@ -10,7 +10,7 @@ uses
   SynEditHighlighter, SynEditCodeFolding, SynHighlighterPython, SynEdit,
   PyPackage,
   Vcl.ExtCtrls, PyCommon, PyModule, PyTorch, NumPy, TorchVision, Vcl.ComCtrls,
-  H5Py, SciPy;
+  H5Py, SciPy, Pandas;
 
 type
   TForm1 = class(TForm)
@@ -31,6 +31,7 @@ type
     Button2: TButton;
     H5Py1: TH5Py;
     SciPy1: TSciPy;
+    Pandas1: TPandas;
     procedure FormCreate(Sender: TObject);
     procedure PyEmbeddedResEnvironment391BeforeDeactivate(Sender: TObject;
       const APythonVersion: string);
@@ -220,6 +221,9 @@ begin
         H5Py1.Install();
         FTask.CheckCanceled();
 
+        Pandas1.Install();
+        FTask.CheckCanceled();
+
         SciPy1.Install();
         FTask.CheckCanceled();
 
@@ -229,6 +233,7 @@ begin
           PyTorch1.Import();
           TorchVision1.Import();
           H5Py1.Import();
+          Pandas1.Import();
           SciPy1.Import();
 }
           Log('Ready');

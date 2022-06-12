@@ -58,7 +58,7 @@ object Form1: TForm1
     Font.Quality = fqClearTypeNatural
     TabOrder = 1
     OnKeyPress = SynEdit1KeyPress
-    UseCodeFolding = True
+    UseCodeFolding = False
     Gutter.AutoSize = True
     Gutter.Font.Charset = DEFAULT_CHARSET
     Gutter.Font.Color = clWindowText
@@ -101,8 +101,6 @@ object Form1: TForm1
       '')
     TabWidth = 4
     WantTabs = True
-    ExplicitLeft = 1
-    ExplicitTop = 268
   end
   object StatusBar1: TStatusBar
     Left = 0
@@ -245,6 +243,16 @@ object Form1: TForm1
     AutoInstall = False
     BeforeInstall = PackageConfigureInstall
     Left = 248
+    Top = 192
+  end
+  object Pandas1: TPandas
+    AutoImport = False
+    PythonEngine = PythonEngine1
+    PyEnvironment = PyEmbeddedResEnvironment391
+    ManagerKind = pip
+    AutoInstall = False
+    BeforeInstall = PackageConfigureInstall
+    Left = 184
     Top = 192
   end
 end
