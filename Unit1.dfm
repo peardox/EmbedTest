@@ -18,11 +18,11 @@ object Form1: TForm1
   TextHeight = 13
   object Splitter1: TSplitter
     Left = 0
-    Top = 575
+    Top = 270
     Width = 635
     Height = 3
     Cursor = crVSplit
-    Align = alBottom
+    Align = alTop
     ExplicitTop = 297
     ExplicitWidth = 281
   end
@@ -33,14 +33,20 @@ object Form1: TForm1
     Height = 270
     TabStop = False
     Align = alTop
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Consolas'
+    Font.Style = []
     Lines.Strings = (
       'Memo1')
+    ParentFont = False
     ScrollBars = ssBoth
     TabOrder = 0
   end
   object SynEdit1: TSynEdit
     Left = 0
-    Top = 270
+    Top = 273
     Width = 635
     Height = 263
     Align = alClient
@@ -94,7 +100,7 @@ object Form1: TForm1
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Top = 556
+    Top = 559
     Width = 635
     Height = 19
     Panels = <
@@ -110,7 +116,7 @@ object Form1: TForm1
   end
   object Panel1: TPanel
     Left = 0
-    Top = 533
+    Top = 536
     Width = 635
     Height = 23
     Align = alBottom
@@ -189,8 +195,10 @@ object Form1: TForm1
     PythonEngine = PythonEngine1
     PyEnvironment = PyEmbeddedResEnvironment391
     ManagerKind = pip
+    Managers.Pip.InstallOptions.ExtraIndexUrl = 'https://download.pytorch.org/whl/cu113'
     AutoInstall = False
     BeforeInstall = PyTorch1BeforeInstall
+    OnInstallError = PackageInstallError
     AfterInstall = PyTorch1AfterInstall
     Left = 520
     Top = 192
@@ -201,6 +209,7 @@ object Form1: TForm1
     PythonEngine = PythonEngine1
     PyEnvironment = PyEmbeddedResEnvironment391
     ManagerKind = pip
+    Managers.Pip.InstallOptions.ExtraIndexUrl = 'https://download.pytorch.org/whl/cu113'
     AutoInstall = False
     BeforeInstall = TorchVision1BeforeInstall
     AfterInstall = TorchVision1AfterInstall

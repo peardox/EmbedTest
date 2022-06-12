@@ -69,6 +69,7 @@ type
     procedure SciPy1AfterInstall(Sender: TObject);
     procedure SciPy1BeforeImport(Sender: TObject);
     procedure SciPy1BeforeInstall(Sender: TObject);
+    procedure PackageInstallError(Sender: TObject; AErrorMessage: string);
   private
     { Private declarations }
 //    Packager: TPyPackage;
@@ -122,6 +123,7 @@ end;
 
 procedure TForm1.NumPy1BeforeInstall(Sender: TObject);
 begin
+  TPyManagedPackage(Sender).OnInstallError := PackageInstallError;
   MaskFPUExceptions(True);
   Log('Installing NumPy');
   UpdateInstallationStatus('Installing NumPy', String.Empty);
@@ -136,9 +138,15 @@ end;
 
 procedure TForm1.PyTorch1BeforeInstall(Sender: TObject);
 begin
+  // 'https://download.pytorch.org/whl/cu113';
   MaskFPUExceptions(True);
   Log('Installing Torch');
   UpdateInstallationStatus('Installing Torch', String.Empty);
+end;
+
+procedure TForm1.PackageInstallError(Sender: TObject; AErrorMessage: string);
+begin
+  Log(TPyPackage(Sender).PyModuleName + ' : ' + AErrorMessage);
 end;
 
 procedure TForm1.NumPy1AfterInstall(Sender: TObject);
@@ -280,12 +288,13 @@ begin
         FTask.CheckCanceled();
 
         TThread.Queue(nil, procedure() begin
+{
           Numpy1.Import();
           PyTorch1.Import();
           TorchVision1.Import();
           H5Py1.Import();
           SciPy1.Import();
-
+}
           Log('Ready');
           UpdateInstallationStatus('Ready', String.Empty);
           SystemAvailable := True;
