@@ -1,0 +1,7 @@
+# Ignore everything in this directory
+*
+# Except this file
+!.gitignore
+!mosaic-vgg16-1010-512.pth
+*.pth
+*.txt
