@@ -154,7 +154,6 @@ object Form1: TForm1
       Caption = 'Run Code'
       TabOrder = 2
       OnClick = Button2Click
-      ExplicitTop = -4
     end
     object Button3: TButton
       Left = 163

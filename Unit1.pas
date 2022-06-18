@@ -202,6 +202,8 @@ begin
   Memo1.Enabled := False;
   SynEdit1.Enabled := False;
   Log('Getting Ready');
+  SynEdit1.Lines.Add('# ' + ExtractFilePath(Application.ExeName));
+//  SynEdit1.Lines.LoadFromFile('C:\\src\\Lartis\\testcode.py');
   CreateSystem;
 end;
 
