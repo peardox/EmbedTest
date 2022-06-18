@@ -10,7 +10,7 @@ uses
   SynEditHighlighter, SynEditCodeFolding, SynHighlighterPython, SynEdit,
   PyPackage,
   Vcl.ExtCtrls, PyCommon, PyModule, PyTorch, NumPy, TorchVision, Vcl.ComCtrls,
-  H5Py, SciPy, Pandas, Vcl.ExtDlgs;
+  SciPy, Vcl.ExtDlgs;
 
 type
   TForm1 = class(TForm)
@@ -18,22 +18,24 @@ type
     PythonGUIInputOutput1: TPythonGUIInputOutput;
     PyEmbeddedResEnvironment391: TPyEmbeddedResEnvironment39;
     Memo1: TMemo;
-    SynEdit1: TSynEdit;
     SynPythonSyn1: TSynPythonSyn;
     Splitter1: TSplitter;
     PyTorch1: TPyTorch;
     TorchVision1: TTorchVision;
     NumPy1: TNumPy;
     StatusBar1: TStatusBar;
+    SciPy1: TSciPy;
+    OpenTextFileDialog1: TOpenTextFileDialog;
+    Panel2: TPanel;
+    SynEdit1: TSynEdit;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
     Panel1: TPanel;
     CheckBox1: TCheckBox;
     Button1: TButton;
     Button2: TButton;
-    H5Py1: TH5Py;
-    SciPy1: TSciPy;
-    Pandas1: TPandas;
     Button3: TButton;
-    OpenTextFileDialog1: TOpenTextFileDialog;
+    TabSheet2: TTabSheet;
     procedure FormCreate(Sender: TObject);
     procedure PyEmbeddedResEnvironment391BeforeDeactivate(Sender: TObject;
       const APythonVersion: string);
@@ -63,12 +65,15 @@ type
     procedure PackageInstallError(Sender: TObject; AErrorMessage: string);
     procedure PackageBeforeImport(Sender: TObject);
     procedure Button3Click(Sender: TObject);
+    procedure PythonGUIInputOutput1SendUniData(Sender: TObject;
+      const Data: string);
   private
     { Private declarations }
 //    Packager: TPyPackage;
     FTask: ITask;
     SystemAvailable: Boolean;
     SystemActivated: Boolean;
+    procedure EnableForm(Enable: Boolean);
     procedure CreateSystem;
     procedure UpdateInstallationStatus(const AStatus,
       ADescription: string);
@@ -94,6 +99,23 @@ begin
     Result := False
   else
     Result := not (FTask.Status in [TTaskStatus.Completed, TTaskStatus.Exception]);
+end;
+
+procedure TForm1.UpdateInstallationStatus(const AStatus,
+  ADescription: string);
+begin
+  if TThread.CurrentThread.ThreadID <> MainThreadID then
+    TThread.Synchronize(nil, procedure() begin
+      StatusBar1.Panels[0].Text := AStatus;
+      StatusBar1.Panels[1].Text := ADescription;
+      StatusBar1.Repaint;
+    end)
+  else
+    begin
+      StatusBar1.Panels[0].Text := AStatus;
+      StatusBar1.Panels[1].Text := ADescription;
+      StatusBar1.Repaint;
+    end;
 end;
 
 procedure TForm1.Log(AMsg: String);
@@ -135,23 +157,6 @@ begin
   Log(TPyPackage(Sender).PyModuleName + ' : ' + AErrorMessage);
 end;
 
-procedure TForm1.UpdateInstallationStatus(const AStatus,
-  ADescription: string);
-begin
-  if TThread.CurrentThread.ThreadID <> MainThreadID then
-    TThread.Synchronize(nil, procedure() begin
-      StatusBar1.Panels[0].Text := AStatus;
-      StatusBar1.Panels[1].Text := ADescription;
-      StatusBar1.Repaint;
-    end)
-  else
-    begin
-      StatusBar1.Panels[0].Text := AStatus;
-      StatusBar1.Panels[1].Text := ADescription;
-      StatusBar1.Repaint;
-    end;
-end;
-
 procedure TForm1.Button1Click(Sender: TObject);
 begin
   SynEdit1.Clear;
@@ -164,8 +169,7 @@ end;
 
 procedure TForm1.Button3Click(Sender: TObject);
 begin
-  if OpenTextFileDialog1.Execute then
-    SynEdit1.Lines.LoadFromFile(OpenTextFileDialog1.Filename);
+  SynEdit1.Lines.LoadFromFile(ExtractFilePath(Application.ExeName) + 'testcode.py');
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -191,18 +195,23 @@ begin
   end;
 end;
 
+procedure TForm1.EnableForm(Enable: Boolean);
+begin
+  Button1.Enabled := Enable;
+  Button2.Enabled := Enable;
+  Button3.Enabled := Enable;
+  CheckBox1.Enabled := Enable;
+  Memo1.Enabled := Enable;
+  SynEdit1.Enabled := Enable;
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   SystemAvailable := False;
   SystemActivated := False;
   Memo1.Clear;
-  Button1.Enabled := False;
-  Button2.Enabled := False;
-  CheckBox1.Enabled := False;
-  Memo1.Enabled := False;
-  SynEdit1.Enabled := False;
+  EnableForm(False);
   Log('Getting Ready');
-//  SynEdit1.Lines.Add('# ' + ExtractFilePath(Application.ExeName));
   SynEdit1.Lines.LoadFromFile(ExtractFilePath(Application.ExeName) + 'testcode.py');
   CreateSystem;
 end;
@@ -229,12 +238,6 @@ begin
         TorchVision1.Install();
         FTask.CheckCanceled();
 
-        H5Py1.Install();
-        FTask.CheckCanceled();
-
-        Pandas1.Install();
-        FTask.CheckCanceled();
-
         SciPy1.Install();
         FTask.CheckCanceled();
 
@@ -243,18 +246,12 @@ begin
           Numpy1.Import();
           PyTorch1.Import();
           TorchVision1.Import();
-          H5Py1.Import();
-          Pandas1.Import();
           SciPy1.Import();
 }
           Log('Ready');
           UpdateInstallationStatus('Ready', String.Empty);
           SystemAvailable := True;
-          Button1.Enabled := True;
-          Button2.Enabled := True;
-          CheckBox1.Enabled := True;
-          Memo1.Enabled := True;
-          SynEdit1.Enabled := True;
+          EnableForm(True);
         end);
       end);
     end;
@@ -313,6 +310,13 @@ end;
 procedure TForm1.PythonEngine1AfterLoad(Sender: TObject);
 begin
   Log('Python Loaded');
+end;
+
+procedure TForm1.PythonGUIInputOutput1SendUniData(Sender: TObject;
+  const Data: string);
+begin
+  Log(Data);
+  Application.ProcessMessages;
 end;
 
 procedure TForm1.SynEdit1KeyPress(Sender: TObject; var Key: Char);
