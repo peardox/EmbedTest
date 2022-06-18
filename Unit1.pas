@@ -10,7 +10,7 @@ uses
   SynEditHighlighter, SynEditCodeFolding, SynHighlighterPython, SynEdit,
   PyPackage,
   Vcl.ExtCtrls, PyCommon, PyModule, PyTorch, NumPy, TorchVision, Vcl.ComCtrls,
-  H5Py, SciPy, Pandas;
+  H5Py, SciPy, Pandas, Vcl.ExtDlgs;
 
 type
   TForm1 = class(TForm)
@@ -32,6 +32,8 @@ type
     H5Py1: TH5Py;
     SciPy1: TSciPy;
     Pandas1: TPandas;
+    Button3: TButton;
+    OpenTextFileDialog1: TOpenTextFileDialog;
     procedure FormCreate(Sender: TObject);
     procedure PyEmbeddedResEnvironment391BeforeDeactivate(Sender: TObject;
       const APythonVersion: string);
@@ -60,6 +62,7 @@ type
     procedure PackageAfterInstall(Sender: TObject);
     procedure PackageInstallError(Sender: TObject; AErrorMessage: string);
     procedure PackageBeforeImport(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
   private
     { Private declarations }
 //    Packager: TPyPackage;
@@ -157,6 +160,12 @@ end;
 procedure TForm1.Button2Click(Sender: TObject);
 begin
   RunCode();
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+begin
+  if OpenTextFileDialog1.Execute then
+    SynEdit1.Lines.LoadFromFile(OpenTextFileDialog1.Filename);
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);

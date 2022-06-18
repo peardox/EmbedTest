@@ -136,7 +136,7 @@ object Form1: TForm1
       Visible = False
     end
     object Button1: TButton
-      Left = 87
+      Left = 82
       Top = 1
       Width = 75
       Height = 21
@@ -154,6 +154,17 @@ object Form1: TForm1
       Caption = 'Run Code'
       TabOrder = 2
       OnClick = Button2Click
+      ExplicitTop = -4
+    end
+    object Button3: TButton
+      Left = 163
+      Top = 1
+      Width = 75
+      Height = 21
+      Align = alCustom
+      Caption = 'Load File'
+      TabOrder = 3
+      OnClick = Button3Click
     end
   end
   object PythonEngine1: TPythonEngine
@@ -254,5 +265,10 @@ object Form1: TForm1
     BeforeInstall = PackageConfigureInstall
     Left = 184
     Top = 192
+  end
+  object OpenTextFileDialog1: TOpenTextFileDialog
+    Filter = '*.py'
+    Left = 360
+    Top = 40
   end
 end
