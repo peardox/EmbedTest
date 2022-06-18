@@ -96,10 +96,10 @@ def main():
                                  help="export ONNX model to a given file")
     eval_arg_parser.add_argument("--movie", type=str, default=None,
                                  help="path to movie styles")
-    eval_arg_parser.add_argument("--add-model-path", type=int, default=1,
-                                 help="Add movie path ot not")
+    eval_arg_parser.add_argument("--add-model-ext", type=int, default=1,
+                                 help="Add model ext or not")
     eval_arg_parser.add_argument("--logfile", type=str, default=None,
-                                  help="Optional lof file location")
+                                  help="Optional log file location")
     args = main_arg_parser.parse_args()
     
     if args.subcommand is None:
@@ -159,7 +159,7 @@ def main():
                     frame_id += 1;
                     args.model = os.path.join(directory, filename)
                     args.output_image = os.path.join('movies', main_model, str(frame_id).zfill(4)) + '.jpg'
-                    args.add_model_path = 0;
+                    args.add_model_ext = 0;
                     print(args.model, " -> ", args.output_image)
             # print("looping : ", x)
                     stylize(args, use_gpu)

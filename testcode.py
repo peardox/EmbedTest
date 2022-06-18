@@ -5,6 +5,7 @@ for p in sys.path:
     print(p)
 
 import argparse
+from argparse import Namespace
 import time
 import logging
 import torch
@@ -36,7 +37,7 @@ def check_gpu():
 
 def main():
     start = time.time()
-    
+
     main_arg_parser = argparse.ArgumentParser(description="parser for fast-neural-style")
     subparsers = main_arg_parser.add_subparsers(title="subcommands", dest="subcommand")
 
@@ -100,16 +101,16 @@ def main():
                                  help="export ONNX model to a given file")
     eval_arg_parser.add_argument("--movie", type=str, default=None,
                                  help="path to movie styles")
-    eval_arg_parser.add_argument("--add-model-path", type=int, default=1,
-                                 help="Add movie path ot not")
+    eval_arg_parser.add_argument("--add-model-ext", type=int, default=1,
+                                 help="Add model ext or not")
     eval_arg_parser.add_argument("--logfile", type=str, default=None,
-                                  help="Optional lof file location")
+                                  help="Optional log file location")
     args = main_arg_parser.parse_args()
-    
+
     if args.subcommand is None:
         print("ERROR: specify either train or eval")
         return(1)
-        
+
     use_gpu = 0
     if not args.ignore_gpu:
         use_gpu = check_gpu()
@@ -121,7 +122,7 @@ def main():
     if args.subcommand == "train":
         check_paths(args)
         trial_batch = args.batch_size
-        
+
         while(1):
             oom = False
             try:
@@ -152,7 +153,7 @@ def main():
             main_model = args.model
             # assign directory
             directory = os.path.join('movies', main_model)
-             
+
             # iterate over files in
             # that directory
             for filename in os.listdir(os.path.join(args.model_dir, directory)):
@@ -163,12 +164,12 @@ def main():
                     frame_id += 1;
                     args.model = os.path.join(directory, filename)
                     args.output_image = os.path.join('movies', main_model, str(frame_id).zfill(4)) + '.jpg'
-                    args.add_model_path = 0;
+                    args.add_model_ext = 0;
                     print(args.model, " -> ", args.output_image)
             # print("looping : ", x)
                     stylize(args, use_gpu)
-        
-    elapsed = time.time() - start    
+
+    elapsed = time.time() - start
     print("Elapsed time = %f secs" % (elapsed))
     hour = elapsed // 3600
     elapsed %= 3600
@@ -178,16 +179,34 @@ def main():
     print("Elapsed time = %d hours %d mins %d secs" % (hour, minutes, seconds))
 
 if __name__ == "__main__":
-    sys.argv = ["blank", "eval",
-        "--content-image", 
-        "C:\src\Lartis\input-images\haywain.jpg",
-        "--output-image",
-        "C:\src\Lartis\output-images\haywain.jpg",
-        "--model",
-        "wall_1024x576-vgg19-1010-512",
-        "--model-dir",
-        "C:\src\Lartis\models"
-        ]
-    print("Go...")
-    main()
+    class DelphiOpts:
+      def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+    use_gpu = check_gpu()
     
+    opts = DelphiOpts( content_image = "input-images\haywain.jpg", \
+    output_image = "output-images\output.jpg", \
+    model = "mosaic-vgg16-1010-512", \
+    model_dir = "models", \
+    content_scale = 1, \
+    cuda = 0, \
+    ignore_gpu = 0, \
+    export_onnx = None, \
+    movie = None, \
+    add_model_ext = 1, \
+    logfile = None
+    )
+
+    start = time.time()
+
+    stylize(opts, use_gpu)
+
+    elapsed = time.time() - start
+    print("Elapsed time = %f secs" % (elapsed))
+    hour = elapsed // 3600
+    elapsed %= 3600
+    minutes = elapsed // 60
+    elapsed %= 60
+    seconds = elapsed
+    print("Elapsed time = %d hours %d mins %d secs" % (hour, minutes, seconds))

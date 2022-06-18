@@ -206,7 +206,7 @@ def stylize(args, use_gpu):
     else:
         with torch.no_grad():
             style_model = TransformerNet()
-            if args.add_model_path == 1:
+            if args.add_model_ext == 1:
                 state_dict = torch.load(os.path.join(args.model_dir, args.model + '.pth'))
             else:
                 state_dict = torch.load(os.path.join(args.model_dir, args.model))
