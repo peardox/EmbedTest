@@ -104,8 +104,9 @@ def do_stylize(opts = None):
     
     if opts == None:
         opts = TProperties( content_image = "input-images\haywain.jpg",
+            content_image_raw = None,
             output_image = "output-images\output2.jpg",
-            model = "test", # "mosaic-vgg16-1010-512",
+            model = "mosaic-vgg16-1010-512",
             model_dir = "models",
             content_scale = 1,
             cuda = 0,

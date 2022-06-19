@@ -142,6 +142,7 @@ def main():
                     sys.exit(1)
     else:
         if args.movie is None:
+            args.content_image_raw = None
             stylize(args, use_gpu)
         else:
             frame_id = 0;

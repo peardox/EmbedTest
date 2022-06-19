@@ -25,7 +25,6 @@ type
     NumPy1: TNumPy;
     StatusBar1: TStatusBar;
     SciPy1: TSciPy;
-    OpenTextFileDialog1: TOpenTextFileDialog;
     Panel2: TPanel;
     SynEdit1: TSynEdit;
     PageControl1: TPageControl;
@@ -36,6 +35,18 @@ type
     Button2: TButton;
     Button3: TButton;
     TabSheet2: TTabSheet;
+    StylePanelLeft: TPanel;
+    StylePanelRight: TPanel;
+    Panel3: TPanel;
+    Button4: TButton;
+    Panel4: TPanel;
+    Button5: TButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    ContentImage: TImage;
+    Image2: TImage;
+    ImageFileDialog: TOpenPictureDialog;
+    StyleDialog: TOpenDialog;
     procedure FormCreate(Sender: TObject);
     procedure PyEmbeddedResEnvironment391BeforeDeactivate(Sender: TObject;
       const APythonVersion: string);
@@ -67,6 +78,9 @@ type
     procedure Button3Click(Sender: TObject);
     procedure PythonGUIInputOutput1SendUniData(Sender: TObject;
       const Data: string);
+    procedure Button4Click(Sender: TObject);
+    procedure Button5Click(Sender: TObject);
+    procedure StylePanelLeftResize(Sender: TObject);
   private
     { Private declarations }
 //    Packager: TPyPackage;
@@ -87,11 +101,44 @@ type
 var
   Form1: TForm1;
 
+function ClampToByte(Value: LongInt): LongInt; inline;
+procedure RGBToYUV(R, G, B: Byte; var Y, U, V: Byte);
+procedure YUVToRGB(Y, U, V: Byte; var R, G, B: Byte);
+
 implementation
 
-uses VarPyth;
+uses VarPyth, JPeg;
 
 {$R *.dfm}
+
+function ClampToByte(Value: LongInt): LongInt;
+begin
+  Result := Value;
+  if Result > 255 then
+    Result := 255
+  else if Result < 0 then
+    Result := 0;
+end;
+
+procedure RGBToYUV(R, G, B: Byte; var Y, U, V: Byte);
+begin
+  Y := ClampToByte(Round( 0.257 * R + 0.504 * G + 0.098 * B) + 16);
+  V := ClampToByte(Round( 0.439 * R - 0.368 * G - 0.071 * B) + 128);
+  U := ClampToByte(Round(-0.148 * R - 0.291 * G + 0.439 * B) + 128);
+end;
+
+procedure YUVToRGB(Y, U, V: Byte; var R, G, B: Byte);
+var
+  CY, CU, CV: LongInt;
+begin
+  CY := Y - 16;
+  CU := U - 128;
+  CV := V - 128;
+  R := ClampToByte(Round(1.164 * CY - 0.002 * CU + 1.596 * CV));
+  G := ClampToByte(Round(1.164 * CY - 0.391 * CU - 0.813 * CV));
+  B := ClampToByte(Round(1.164 * CY + 2.018 * CU - 0.001 * CV));
+end;
+
 
 function TForm1.IsTaskRunning: boolean;
 begin
@@ -170,6 +217,22 @@ end;
 procedure TForm1.Button3Click(Sender: TObject);
 begin
   SynEdit1.Lines.LoadFromFile(ExtractFilePath(Application.ExeName) + 'testcode.py');
+end;
+
+procedure TForm1.Button4Click(Sender: TObject);
+begin
+  if ImageFileDialog.Execute then
+  begin
+    ContentImage.Picture.LoadFromFile(ImageFileDialog.FileName);
+  end;
+end;
+
+procedure TForm1.Button5Click(Sender: TObject);
+begin
+  if StyleDialog.Execute then
+  begin
+
+  end;
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -317,6 +380,13 @@ procedure TForm1.PythonGUIInputOutput1SendUniData(Sender: TObject;
 begin
   Log(Data);
   Application.ProcessMessages;
+end;
+
+procedure TForm1.StylePanelLeftResize(Sender: TObject);
+begin
+  StylePanelLeft.Width := TabSheet2.Width div 2;
+//  StylePanelLeft.Height := TabSheet2.Height;
+//  Log('Panel = ' + IntToStr(StylePanelLeft.Width) + 'x' + IntToStr(StylePanelLeft.Height));
 end;
 
 procedure TForm1.SynEdit1KeyPress(Sender: TObject; var Key: Char);

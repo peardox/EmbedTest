@@ -246,8 +246,12 @@ def train(args, use_gpu, trial_batch_size):
 
 def stylize(args, use_gpu):
     device = torch.device("cuda" if use_gpu else "cpu")
+    
+    if args.content_image_raw == None:
+        content_image = utils.load_image(args.content_image, scale=args.content_scale)
+    else:
+        content_image = content_image_raw
 
-    content_image = utils.load_image(args.content_image, scale=args.content_scale)
     content_transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Lambda(lambda x: x.mul(255))

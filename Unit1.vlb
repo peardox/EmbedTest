@@ -1,7 +1,4 @@
-﻿[OpenTextFileDialog1]
-Coordinates=332,1,136,36
-
-[Splitter1]
+﻿[Splitter1]
 Coordinates=10,146,62,36
 
 [SynPythonSyn1]
@@ -39,5 +36,5 @@ Coordinates=84,10,55,58
 Visible=True
 
 []
-Coordinates=0,137,53,36
+Coordinates=332,1,136,36
 

@@ -1,7 +1,7 @@
 object Form1: TForm1
   Left = 0
   Top = 0
-  Caption = 'Form1'
+  Caption = 'EmbedTest'
   ClientHeight = 578
   ClientWidth = 635
   Color = clBtnFace
@@ -69,16 +69,12 @@ object Form1: TForm1
     BevelOuter = bvNone
     Caption = 'Panel2'
     TabOrder = 2
-    ExplicitLeft = 8
-    ExplicitTop = 288
-    ExplicitWidth = 185
-    ExplicitHeight = 41
     object PageControl1: TPageControl
       Left = 0
       Top = 0
       Width = 635
       Height = 286
-      ActivePage = TabSheet1
+      ActivePage = TabSheet2
       Align = alClient
       TabOrder = 0
       object TabSheet1: TTabSheet
@@ -90,8 +86,6 @@ object Form1: TForm1
           Height = 23
           Align = alBottom
           TabOrder = 0
-          ExplicitTop = 263
-          ExplicitWidth = 635
           object CheckBox1: TCheckBox
             Left = 504
             Top = 1
@@ -101,7 +95,6 @@ object Form1: TForm1
             Caption = 'Wipe Python on Exit'
             TabOrder = 0
             Visible = False
-            ExplicitLeft = 512
           end
           object Button1: TButton
             Left = 82
@@ -192,13 +185,105 @@ object Form1: TForm1
             '')
           TabWidth = 4
           WantTabs = True
-          ExplicitWidth = 635
-          ExplicitHeight = 286
         end
       end
       object TabSheet2: TTabSheet
         Caption = 'Style'
         ImageIndex = 1
+        object StylePanelLeft: TPanel
+          Left = 0
+          Top = 0
+          Width = 305
+          Height = 258
+          Align = alLeft
+          TabOrder = 0
+          OnResize = StylePanelLeftResize
+          object ContentImage: TImage
+            Left = 1
+            Top = 1
+            Width = 303
+            Height = 231
+            Align = alClient
+            AutoSize = True
+            Center = True
+            Proportional = True
+            ExplicitLeft = -2
+            ExplicitTop = -4
+          end
+          object Panel3: TPanel
+            Left = 1
+            Top = 232
+            Width = 303
+            Height = 25
+            Align = alBottom
+            TabOrder = 0
+            object Label2: TLabel
+              Left = 1
+              Top = 1
+              Width = 251
+              Height = 23
+              Align = alClient
+              ExplicitWidth = 3
+              ExplicitHeight = 13
+            end
+            object Button4: TButton
+              Left = 252
+              Top = 1
+              Width = 50
+              Height = 23
+              Align = alRight
+              Caption = 'Open'
+              TabOrder = 0
+              OnClick = Button4Click
+            end
+          end
+        end
+        object StylePanelRight: TPanel
+          Left = 305
+          Top = 0
+          Width = 322
+          Height = 258
+          Align = alClient
+          TabOrder = 1
+          object Image2: TImage
+            Left = 1
+            Top = 1
+            Width = 320
+            Height = 231
+            Align = alClient
+            ExplicitLeft = 56
+            ExplicitTop = 48
+            ExplicitWidth = 105
+            ExplicitHeight = 105
+          end
+          object Panel4: TPanel
+            Left = 1
+            Top = 232
+            Width = 320
+            Height = 25
+            Align = alBottom
+            TabOrder = 0
+            object Label1: TLabel
+              Left = 1
+              Top = 1
+              Width = 268
+              Height = 23
+              Align = alClient
+              ExplicitWidth = 3
+              ExplicitHeight = 13
+            end
+            object Button5: TButton
+              Left = 269
+              Top = 1
+              Width = 50
+              Height = 23
+              Align = alRight
+              Caption = 'Style'
+              TabOrder = 0
+              OnClick = Button5Click
+            end
+          end
+        end
       end
     end
   end
@@ -282,9 +367,16 @@ object Form1: TForm1
     Left = 312
     Top = 192
   end
-  object OpenTextFileDialog1: TOpenTextFileDialog
-    Filter = '*.py'
-    Left = 360
-    Top = 40
+  object ImageFileDialog: TOpenPictureDialog
+    Filter = 
+      'JPEG Image File (*.jpg)|*.jpg|JPEG Image File (*.jpeg)|*.jpeg|Po' +
+      'rtable Network Graphics (*.png)|*.png'
+    Left = 120
+    Top = 24
+  end
+  object StyleDialog: TOpenDialog
+    Filter = 'Styles|*.pth'
+    Left = 104
+    Top = 80
   end
 end
